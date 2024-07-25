@@ -5,60 +5,257 @@
 {% endblock %}
 
 {% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        min-height: 100vh;
+    }
+    
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        margin-top: 50px;
+        backdrop-filter: blur(10px);
+    }
+    
+    h1 {
+        font-size: 50px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 30px;
+    }
+    
+    h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        border-radius: 2px;
+    }
+    
+    .form-row {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    
+    .form-control {
+        flex: 1;
+        border-radius: 25px 0 0 25px;
+        border: none;
+        background-color: #f0f0f0;
+        transition: all 0.3s ease;
+        padding: 15px;
+        font-size: 16px;
+        height: 54px;
+    }
+    
+    .form-control:focus {
+        box-shadow: 0 0 15px rgba(231, 60, 126, 0.5);
+        outline: none;
+    }
+    
+    .btn-outline-primary {
+        border-radius: 0 25px 25px 0;
+        background: linear-gradient(90deg, #ee7752, #e73c7e);
+        border: none;
+        color: white;
+        transition: all 0.3s ease;
+        padding: 15px 30px;
+        font-weight: bold;
+        font-size: 16px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-outline-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(231, 60, 126, 0.3);
+    }
+    
+    .list-group-item {
+        border: none;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-out;
+        padding: 20px;
+        background-color: #f8f9fa;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .list-group-item:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .todo-status-checkbox {
+        margin-right: 15px;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border: 2px solid #e73c7e;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .todo-status-checkbox:checked {
+        background-color: #e73c7e;
+    }
+    
+    .todo-status-checkbox:checked::after {
+        content: '✓';
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 16px;
+    }
+    
+    .todo-complete {
+        background-color: #e9ecef;
+        text-decoration: line-through;
+        color: #6c757d;
+    }
+    
+    .far.fa-trash-alt {
+        color: #e73c7e;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.2em;
+    }
+    
+    .far.fa-trash-alt:hover {
+        color: #c71f5c;
+        transform: scale(1.2) rotate(10deg);
+    }
+    
+    .motivational-quote {
+        text-align: center;
+        margin-top: 40px;
+        font-style: italic;
+        color: #555;
+        font-size: 1.1em;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
 <div class="container">
-
-  <!-- title row -->
-  <div class="row">
-    <div class="offset-md-2 col-lg-9">
-      <div class="page-header">
-        <h1 style="font-size: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-          Todo List by HBN 
-        </h1>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add a todo row -->
-  <div class="row">
-    <div class="offset-md-2 col-lg-9">
-      <form method="post" action="{% url 'todos:add' %}">
-        {% csrf_token %}
-        <div class="form-row">
-          <div class="col-md-6">
-            <input type="text" class="form-control" name="title" placeholder="Do laundry" required>
-          </div>
-          <div class="col-md-6">
-            <button type="submit" name="submit" class="btn btn-outline-primary">
-              Add
-            </button>
-          </div>
+    <!-- title row -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="page-header">
+                <h1>Todo List by HBN</h1>
+            </div>
         </div>
-      </form>
     </div>
-  </div>
-  <hr />
 
-  <!-- todo list row -->
-  <div class="row">
-    <div class="offset-md-2 col-lg-6">
-      <div class="list-group">
-        {% for todo in todo_list %}
-        <div class="list-group-item {% if todo.isCompleted %} todo-complete {% endif %}">
-          <form style="display: inline;" method="post" action="{% url 'todos:update' todo.id %}">
-            {% csrf_token %}
-            <input type="checkbox" name="isCompleted" onchange="this.form.submit()" {% if todo.isCompleted %} checked
-              {% endif %} class="todo-status-checkbox"
-              title="{% if not todo.isCompleted %} mark as done {% else %} mark undone {% endif %}">
-          </form>
-          {{ todo.title }}
-          <a href="{% url 'todos:delete' todo.id %}" title="Delete">
-            <i class="far fa-trash-alt"></i>
-          </a>
+    <!-- Add a todo row -->
+    <div class="row">
+        <div class="col-12">
+            <form method="post" action="{% url 'todos:add' %}">
+                {% csrf_token %}
+                <div class="form-row">
+                    <input type="text" class="form-control" name="title" placeholder="Enter a new task" required>
+                    <button type="submit" name="submit" class="btn btn-outline-primary">
+                        Add Task
+                    </button>
+                </div>
+            </form>
         </div>
-        {% endfor %}
-      </div>
     </div>
-  </div>
+    <hr />
+
+    <!-- todo list row -->
+    <div class="row">
+        <div class="col-12">
+            <div class="list-group">
+                {% for todo in todo_list %}
+                <div class="list-group-item {% if todo.isCompleted %} todo-complete {% endif %} d-flex align-items-center">
+                    <form style="display: inline;" method="post" action="{% url 'todos:update' todo.id %}">
+                        {% csrf_token %}
+                        <input type="checkbox" name="isCompleted" onchange="this.form.submit()" 
+                               {% if todo.isCompleted %} checked {% endif %} 
+                               class="todo-status-checkbox"
+                               title="{% if not todo.isCompleted %}mark as done{% else %}mark undone{% endif %}">
+                    </form>
+                    <span class="flex-grow-1">{{ todo.title }}</span>
+                    <a href="{% url 'todos:delete' todo.id %}" title="Delete" class="delete-icon">
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="motivational-quote">
+        "The secret of getting ahead is getting started." - Mark Twain
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+    // Add confetti effect when a task is completed
+    document.querySelectorAll('.todo-status-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        });
+    });
+
+    // Random motivational quotes
+    const quotes = [
+        "The secret of getting ahead is getting started. - Mark Twain",
+        "The only way to do great work is to love what you do. - Steve Jobs",
+        "Don't watch the clock; do what it does. Keep going. - Sam Levenson",
+        "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+        "Believe you can and you're halfway there. - Theodore Roosevelt"
+    ];
+
+    function changeQuote() {
+        const quoteElement = document.querySelector('.motivational-quote');
+        quoteElement.style.opacity = 0;
+        setTimeout(() => {
+            quoteElement.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+            quoteElement.style.opacity = 1;
+        }, 500);
+    }
+
+    setInterval(changeQuote, 10000); // Change quote every 10 seconds
+</script>
 {% endblock %}
