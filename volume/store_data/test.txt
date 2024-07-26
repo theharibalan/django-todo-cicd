@@ -1,0 +1,1 @@
+created a execute docker command to build and push it to the docker hub
