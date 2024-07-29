@@ -1,29 +1,30 @@
-# Include base image
+# First stage: Build environment
+FROM python:3-slim as build-env
 
-FROM python:3 
-
-# Assign the working directory
-
+# Set the working directory
 WORKDIR /data
 
-# Install the dependencies
-
+# Install dependencies
 RUN pip install django==3.2
 
-# Copy file to runnable path  - from and to 
-
+# Copy the application code
 COPY . .
 
-# run the commands to execute
-
+# Run database migrations
+RUN python manage.py makemigrations
 RUN python manage.py migrate
 
-#expose the port to the world
+# Second stage: Use slim image for debugging
+FROM python:3-slim
 
+# Set the working directory
+WORKDIR /data
+
+# Copy only necessary files from the build stage
+COPY --from=build-env /data /data
+
+# Expose the application port
 EXPOSE 8000
 
-# final runnable commands are enclosed with paranthesis and seperate
-
-CMD ["python","manage.py","runserver","0.0.0.0:8000"]
-
-
+# Run the application directly
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
