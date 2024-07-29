@@ -21,10 +21,10 @@ COPY . .
 FROM gcr.io/distroless/python3
 
 # Set the working directory
-WORKDIR /data
+# WORKDIR /data
 
 # Copy only necessary files from the build stage
-COPY --from=build-env /data /data
+COPY --from=build-env . .
 
 # Expose the application port
 EXPOSE 8000
