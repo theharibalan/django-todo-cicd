@@ -30,4 +30,6 @@ COPY --from=build-env /data /data
 EXPOSE 8000
 
 # Run the application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myapp.wsgi:application"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "myapp.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "todoApp.wsgi:application"]
+
