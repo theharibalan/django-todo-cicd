@@ -1,33 +1,29 @@
-# First stage: Build environment
-FROM python:3.10-slim as build-env
+# Include base image
 
-# Set the working directory
+FROM python:3 
+
+# Assign the working directory
+
 WORKDIR /data
 
-# Copy requirements file if available (optional step)
-# COPY requirements.txt /data/
+# Install the dependencies
 
-# Install dependencies
 RUN pip install django==3.2
 
-# Copy the application code
+# Copy file to runnable path  - from and to 
+
 COPY . .
 
-# Run database migrations
-RUN python manage.py makemigrations
+# run the commands to execute
+
 RUN python manage.py migrate
 
-# Second stage: Distroless Python image
-FROM python:3.10-slim
+#expose the port to the world
 
-# Set the working directory
-WORKDIR /data
-
-# Copy only necessary files from the build stage
-COPY --from=build-env /data /data
-
-# Expose the application port
 EXPOSE 8000
 
-# Run the application directly
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# final runnable commands are enclosed with paranthesis and seperate
+
+CMD ["python","manage.py","runserver","0.0.0.0:8000"]
+
+
