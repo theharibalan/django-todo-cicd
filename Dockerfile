@@ -1,5 +1,10 @@
 # Build stage
-
+FROM python:3.10-slim as build-env
+WORKDIR /data
+RUN pip install django==3.2 gunicorn
+COPY . .
+RUN python manage.py makemigrations
+RUN python manage.py migrate
 
 # Final stage
 FROM python:3.10-slim
