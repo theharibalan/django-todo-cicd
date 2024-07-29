@@ -4,6 +4,9 @@ FROM python:3.10-slim as build-env
 # Set the working directory
 WORKDIR /data
 
+# Copy requirements file if available (optional step)
+# COPY requirements.txt /data/
+
 # Install dependencies
 RUN pip install django==3.2
 
@@ -14,8 +17,8 @@ COPY . .
 RUN python manage.py makemigrations
 RUN python manage.py migrate
 
-# Second stage: Use slim image for debugging
-FROM python:3.10-slim
+# Second stage: Distroless Python image
+FROM gcr.io/distroless/python3
 
 # Set the working directory
 WORKDIR /data
