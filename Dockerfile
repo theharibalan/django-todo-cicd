@@ -14,8 +14,8 @@ RUN pip install django==3.2
 COPY . .
 
 # Run database migrations
-RUN python manage.py makemigrations
-RUN python manage.py migrate
+# RUN python manage.py makemigrations
+# RUN python manage.py migrate
 
 # Second stage: Distroless Python image
 FROM gcr.io/distroless/python3
