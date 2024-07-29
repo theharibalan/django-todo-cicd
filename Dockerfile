@@ -5,8 +5,7 @@ FROM python:3.10-slim as build-env
 WORKDIR /data
 
 # Install dependencies
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install django==3.2
 
 # Copy the application code
 COPY . .
