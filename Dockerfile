@@ -14,8 +14,8 @@ COPY . .
 RUN python manage.py makemigrations
 RUN python manage.py migrate
 
-# Second stage: Distroless Python image
-FROM gcr.io/distroless/python3
+# Second stage: Use slim image for debugging
+FROM python:3.10-slim
 
 # Set the working directory
 WORKDIR /data
