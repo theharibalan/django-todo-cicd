@@ -7,9 +7,6 @@ WORKDIR /data
 # Install dependencies
 RUN pip install django==3.2
 
-# Install any additional dependencies if required
-RUN pip install ...
-
 # Copy the application code
 COPY . .
 
