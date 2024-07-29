@@ -14,17 +14,17 @@ RUN pip install django==3.2
 COPY . .
 
 # Run database migrations
-# RUN python manage.py makemigrations
-# RUN python manage.py migrate
+RUN python manage.py makemigrations
+RUN python manage.py migrate
 
 # Second stage: Distroless Python image
-FROM gcr.io/distroless/python3
+FROM python:3.10-slim
 
 # Set the working directory
-# WORKDIR /data
+WORKDIR /data
 
 # Copy only necessary files from the build stage
-COPY --from=build-env . .
+COPY --from=build-env /data /data
 
 # Expose the application port
 EXPOSE 8000
