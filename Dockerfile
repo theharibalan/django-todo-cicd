@@ -1,31 +1,44 @@
-# First stage: Build environment
+# Build stage
 FROM python:3.10-slim as build-env
-
-# Set the working directory
 WORKDIR /data
-
-# Install dependencies
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-# Copy the application code
+RUN pip install django==3.2 gunicorn
 COPY . .
-
-# Run database migrations
 RUN python manage.py makemigrations
 RUN python manage.py migrate
 
-# Second stage: Runtime environment
+# Final stage
 FROM python:3.10-slim
-
-# Set the working directory
 WORKDIR /data
-
-# Copy only necessary files from the build stage
 COPY --from=build-env /data /data
-
-# Expose the application port
+RUN pip install gunicorn django==3.2
 EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "todoApp.wsgi:application"]
 
-# Run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+# Previous Docker File
+
+# FROM python:3 
+
+# # Assign the working directory
+
+# WORKDIR /data
+
+# # Install the dependencies
+
+# RUN pip install django==3.2
+
+# # Copy file to runnable path  - from and to 
+
+# COPY . .
+
+# # run the commands to execute
+
+# RUN python manage.py migrate
+
+# #expose the port to the world
+
+# EXPOSE 8000
+
+# # final runnable commands are enclosed with paranthesis and seperated with " ". " "
+
+# CMD ["python","manage.py","runserver","0.0.0.0:8000"]
